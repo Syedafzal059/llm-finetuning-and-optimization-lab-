@@ -1,4 +1,6 @@
-transformers 
+transformers
 torch
 accelerate
 python-dotenv
+datasets
+pyyaml

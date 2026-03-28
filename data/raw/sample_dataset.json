@@ -1,0 +1,14 @@
+[
+    {
+      "instruction": "Explain LoRA in simple terms",
+      "response": "LoRA is a method to fine-tune large models efficiently by updating small matrices instead of full weights."
+    },
+    {
+      "instruction": "What is gradient descent?",
+      "response": "Gradient descent is an optimization algorithm used to minimize loss by adjusting model parameters."
+    },
+    {
+      "instruction": "Explain overfitting",
+      "response": "Overfitting happens when a model memorizes training data instead of learning general patterns."
+    }
+  ]
