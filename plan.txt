@@ -1,0 +1,414 @@
+================================================================================
+LLM FINETUNING AND OPTIMIZATION LAB — IMPLEMENTATION PLAN
+================================================================================
+Project name: llm-finetuning-and-optimization-lab
+Audience: Beginners who want production-style depth (top-tier AI engineering signals)
+Principles: Clarity, config-driven workflows, measurable outcomes, minimal accidental complexity
+
+================================================================================
+1. HIGH-LEVEL ARCHITECTURE
+================================================================================
+
+Pipeline (left to right):
+
+  BASELINE → FINE-TUNING → OPTIMIZATION → INFERENCE → BENCHMARKING
+
+1) BASELINE
+   - Load a small instruction-following model from Hugging Face (Transformers).
+   - Run a fixed prompt set on CPU and GPU (optional) to establish latency,
+     peak memory, and qualitative baselines before any training.
+   - Freeze all weights; no adaptation yet.
+
+2) FINE-TUNING (SFT, LoRA, QLoRA)
+   - Prepare a compact, high-signal dataset (e.g., instruction–response pairs).
+   - SFT: full or selective fine-tuning of trainable layers (keep scope small).
+   - LoRA: inject low-rank adapters via PEFT; base weights frozen.
+   - QLoRA: 4-bit (or 8-bit) base model + LoRA adapters; train adapters only.
+   - Each run writes: config snapshot, metrics, checkpoints path, logs.
+
+3) OPTIMIZATION (post-training compression / serving prep)
+   - Quantize trained artifacts for inference (8-bit, 4-bit) where supported.
+   - Compare memory footprint and throughput vs unquantized adapters.
+   - Document tradeoffs: accuracy drift vs speed and VRAM.
+
+4) INFERENCE
+   - FastAPI service exposing POST /generate with JSON body:
+     model_kind (base | sft | lora | qlora | quantized variants),
+     prompt, generation parameters (max_new_tokens, temperature, top_p).
+   - Load models lazily or via a small registry mapping names to loaders
+     (implementation detail left for coding phase; this plan stays conceptual).
+
+5) BENCHMARKING
+   - Same fixed prompts and decoding settings across all variants.
+   - Record: wall-clock latency (p50/p95 if repeated), peak RAM/VRAM,
+     tokens per second (optional), and lightweight quality checks
+     (exact match on tiny held-out set, or LLM-as-judge only if you add it later).
+   - Emit a structured table (CSV or JSON) plus human-readable summary.
+
+Data and control flow (conceptual):
+
+  Config files → Training scripts → Checkpoints + metrics
+  Checkpoints + config → API loaders → /generate
+  Benchmark driver → invokes API or local generate → results table
+
+Why this order: baseline isolates hardware effects; fine-tuning proves adaptation;
+optimization proves deployment thinking; inference proves systems integration;
+benchmarking proves measurement discipline.
+
+================================================================================
+2. COMPLETE DIRECTORY STRUCTURE
+================================================================================
+
+llm-finetuning-and-optimization-lab/
+├── configs/                      # YAML/JSON configs: model, data, train, eval, api
+│   ├── baseline.yaml
+│   ├── train_sft.yaml
+│   ├── train_lora.yaml
+│   ├── train_qlora.yaml
+│   ├── quantize_inference.yaml
+│   └── api.yaml
+├── data/                         # Raw and processed data (gitignored large files)
+│   ├── raw/                      # Original downloads or exports
+│   ├── processed/              # Tokenized or JSONL ready for training
+│   └── prompts/                # Fixed benchmark prompts (versioned, small)
+├── src/                          # Application and library code
+│   ├── __init__.py
+│   ├── data/                     # Dataset loading, preprocessing, splits
+│   ├── models/                   # Model builders, PEFT wrapper helpers
+│   ├── training/                 # Trainer setup, callbacks, metric hooks
+│   ├── optimization/             # Quantization utilities, memory helpers
+│   ├── inference/                # Generation utilities shared by API and benchmarks
+│   ├── api/                      # FastAPI app, routers, schemas
+│   └── benchmarking/             # Drivers, reporters, table builders
+├── scripts/                      # CLI entrypoints (thin wrappers over src)
+│   ├── run_baseline.py
+│   ├── train_sft.py
+│   ├── train_lora.py
+│   ├── train_qlora.py
+│   ├── quantize_for_inference.py
+│   ├── serve_api.py
+│   └── run_benchmarks.py
+├── experiments/                  # Outputs: not committed in full (use .gitignore)
+│   └── <run_id>/                 # logs, metrics.json, checkpoints path reference
+├── tests/                        # Unit tests for data, config loading, API contracts
+├── notebooks/                    # Optional exploratory notebooks (keep optional)
+├── requirements.txt              # Pinned-ish dependencies for reproducibility
+├── environment.yml               # Optional Conda alternative
+├── .env.example                  # Document env vars (no secrets)
+├── .gitignore
+├── registry.txt                  # Canonical list of experiments and artifacts
+└── plan.txt                      # This document
+
+Folder rationale:
+- configs/: Single source of truth; avoids hardcoding in scripts.
+- data/: Separates immutable prompts from heavy training corpora.
+- src/: Reusable modules; scripts stay thin.
+- scripts/: Reproducible commands documented in README (later).
+- experiments/: Isolated runs for comparison and tracking.
+- tests/: Prevents regressions in config and API behavior.
+
+================================================================================
+3. STEP-BY-STEP EXECUTION PLAN (PHASES)
+================================================================================
+
+--------------------------------------------------------------------------------
+PHASE 1: SETUP + BASELINE
+--------------------------------------------------------------------------------
+What to implement:
+- Python environment, GPU driver sanity check, pinned dependencies.
+- Config schema for model name, dtype, device, and paths.
+- Baseline script: load model, run N fixed prompts, log time and memory.
+- Minimal logging setup (structured log lines or JSON lines).
+
+Expected output:
+- Baseline metrics file (e.g., experiments/baseline_<date>/metrics.json).
+- Confirmed working path from Hugging Face model id to local generate.
+
+Key learning:
+- End-to-end reproducibility starts with environment and pinned configs.
+- Baseline isolates inference cost before any training variables.
+
+--------------------------------------------------------------------------------
+PHASE 2: SUPERVISED FINE-TUNING (SFT)
+--------------------------------------------------------------------------------
+What to implement:
+- Instruction dataset in a simple format (JSONL: instruction, response).
+- Training script using Hugging Face Trainer (or similar) with args from config.
+- Train/eval split; short training run (demo-scale, not leaderboard-scale).
+- Save checkpoint and training curves (loss).
+
+Expected output:
+- Adapter-free fine-tuned weights (or partial fine-tune, per config).
+- Training log with steps, loss, and wall time.
+
+Key learning:
+- SFT is the reference for “full update” behavior vs parameter-efficient methods.
+- Data quality and length dominate small-model results.
+
+--------------------------------------------------------------------------------
+PHASE 3: LORA (PEFT)
+--------------------------------------------------------------------------------
+What to implement:
+- Same dataset and comparable hyperparameters where fair.
+- PEFT LoRA config: rank, alpha, target modules documented in config file.
+- Train only adapters; merge or save adapter weights separately.
+
+Expected output:
+- Adapter checkpoint directory (small on disk vs full model).
+- Metrics comparable to SFT phase for fair benchmarking later.
+
+Key learning:
+- LoRA reduces trainable parameters and often matches SFT for narrow tasks.
+- Target module choice matters for transformer blocks.
+
+--------------------------------------------------------------------------------
+PHASE 4: QLORA
+--------------------------------------------------------------------------------
+What to implement:
+- Load base model in 4-bit (BitsAndBytes) with PEFT LoRA on top.
+- Training with gradient checkpointing if needed (config flag).
+- Save adapters; record training peak VRAM vs standard LoRA.
+
+Expected output:
+- QLoRA adapter bundle + training metrics emphasizing memory savings.
+
+Key learning:
+- Quantization for training is different from quantization for inference;
+  QLoRA demonstrates training under memory pressure.
+
+--------------------------------------------------------------------------------
+PHASE 5: GPU EXPERIMENTS
+--------------------------------------------------------------------------------
+What to implement:
+- Controlled sweeps (small grid): batch size, gradient accumulation steps,
+  mixed precision off vs fp16 vs bf16 (hardware permitting).
+- Instrumentation: step time, throughput, peak allocated memory.
+
+Expected output:
+- A small results matrix (per experiment id) appended to registry.
+- Short notes on OOM failures and which config recovered via accumulation.
+
+Key learning:
+- Effective batch size = batch_size × accumulation × num_gpus (conceptually).
+- Mixed precision trades numerical range for speed; bf16 vs fp16 depends on GPU.
+
+--------------------------------------------------------------------------------
+PHASE 6: QUANTIZATION (INFERENCE)
+--------------------------------------------------------------------------------
+What to implement:
+- Post-training quantization paths: 8-bit and 4-bit inference models
+  (where the stack supports it cleanly).
+- Side-by-side load of base, fine-tuned, and quantized variants for compare.
+
+Expected output:
+- Quantized artifact paths and a short report of load memory and latency.
+
+Key learning:
+- Quantization is a serving concern; measure quality impact on your task.
+
+--------------------------------------------------------------------------------
+PHASE 7: API (FASTAPI)
+--------------------------------------------------------------------------------
+What to implement:
+- FastAPI app with POST /generate.
+- Request validation (prompt length limits, parameter bounds).
+- Model routing: base, sft, lora, qlora, quantized (names aligned with registry).
+- Health endpoint for orchestration (e.g., GET /health).
+
+Expected output:
+- Running server documented with example curl or HTTP client calls.
+- Consistent JSON response shape (text, model_used, timing metadata optional).
+
+Key learning:
+- Production APIs separate transport from model logic and enforce limits.
+
+--------------------------------------------------------------------------------
+PHASE 8: BENCHMARKING
+--------------------------------------------------------------------------------
+What to implement:
+- Benchmark driver hitting /generate or calling shared inference module.
+- Repeated requests for latency percentiles; memory sampling where possible.
+- Quality checks: small golden set or simple metric (per project choice).
+
+Expected output:
+- Structured results table (see section 6) exported as CSV/JSON.
+- Narrative summary: best latency, best quality, best memory tradeoff.
+
+Key learning:
+- Benchmarks are only fair with fixed prompts, temperature, and max tokens.
+- p95 latency often matters more than mean for interactive UX.
+
+================================================================================
+4. KEY CODE COMPONENTS (FILES AND RESPONSIBILITIES)
+================================================================================
+
+configs/*.yaml
+- Model identifiers, dtype, quantization flags, LoRA hyperparameters,
+  training epochs, batch size, gradient accumulation, logging directories.
+
+src/data/load_dataset.py
+- Load JSONL, apply chat template if used, train/val split.
+
+src/data/prompts.py
+- Load fixed benchmark prompts from data/prompts.
+
+src/models/factory.py
+- Central place to build AutoModelForCausalLM + tokenizer,
+  attach PEFT, apply BitsAndBytes for QLoRA.
+
+src/training/setup_trainer.py
+- Construct TrainingArguments, callbacks, and metric logging hooks.
+
+src/training/memory_utils.py
+- Helpers to read torch.cuda.max_memory_allocated or CPU RSS where applicable.
+
+src/optimization/quantize.py
+- Wrap loading/saving quantized models for inference comparison.
+
+src/inference/generate.py
+- Single function: model + tokenizer + decode parameters → output string.
+
+src/api/main.py
+- FastAPI application creation, middleware if needed.
+
+src/api/routes/generate.py
+- POST /generate handler, validation, calls into inference layer.
+
+src/api/schemas.py
+- Pydantic models for request and response.
+
+src/benchmarking/runner.py
+- Loop over model variants and prompts; collect timings.
+
+src/benchmarking/report.py
+- Build tables and write artifacts to experiments/.
+
+scripts/*.py
+- Parse config path from CLI, invoke src functions, exit codes for CI.
+
+tests/test_api_generate.py
+- Contract tests for /generate happy path and validation errors.
+
+tests/test_config_load.py
+- Ensure all configs parse and required keys exist.
+
+================================================================================
+5. EXPERIMENT DESIGN
+================================================================================
+
+Naming: Each experiment gets an ID recorded in registry.txt (see registry file).
+
+E1 — CPU vs GPU inference (baseline)
+- Independent variables: device = cpu | cuda
+- Fixed: model, prompts, max_new_tokens, dtype policy
+- Measured: latency, peak memory, tokens/sec
+- Hypothesis: GPU lowers latency for autoregressive decode at scale; CPU viable for tiny models only.
+
+E2 — Batch size vs memory (training)
+- Independent variables: per_device_train_batch_size
+- Fixed: model, seq length, accumulation=1 initially
+- Measured: peak VRAM, step time, OOM boundary
+- Hypothesis: Larger micro-batches increase memory linearly until OOM.
+
+E3 — Gradient accumulation (effective batch)
+- Independent variables: gradient_accumulation_steps
+- Fixed: per_device_train_batch_size at a safe value
+- Measured: step wall time, training stability (loss curve)
+- Hypothesis: Accumulation simulates larger batch with similar updates, slower steps.
+
+E4 — FP32 vs FP16 vs BF16 (training or inference)
+- Independent variables: fp16, bf16 flags (mutually exclusive where required)
+- Fixed: model, batch, accumulation
+- Measured: throughput, peak memory, any NaN/instability flags
+- Hypothesis: Mixed precision improves throughput; bf16 often more stable on supported GPUs.
+
+E5 — LoRA rank sweep (optional small grid)
+- Independent variables: r in {8, 16, 32}
+- Fixed: data, steps, alpha scaled consistently if desired
+- Measured: val loss proxy, adapter size, inference latency overhead
+
+E6 — 8-bit vs 4-bit inference quantization
+- Independent variables: quantization mode for inference load
+- Fixed: prompts, decoding params
+- Measured: load time, VRAM, latency, qualitative output comparison
+
+E7 — Model variant quality spot-check
+- Independent variables: base | sft | lora | qlora | quantized
+- Fixed: prompts and decoding
+- Measured: simple automatic score or human rubric on a tiny set
+
+Always document: hardware model, CUDA version, library versions, and random seed.
+
+================================================================================
+6. BENCHMARK TABLE FORMAT
+================================================================================
+
+Use one row per (model_variant, hardware_context, experiment_id). Example columns:
+
+| Model          | Variant_ID | Device | Precision | Latency_p50_ms | Latency_p95_ms | Peak_VRAM_GB | Peak_RAM_GB | Quality_Score | Notes                          |
+|----------------|------------|--------|-----------|----------------|----------------|--------------|-------------|---------------|--------------------------------|
+| mistral-7b-inst| baseline   | CUDA   | bf16      | 120            | 180            | 14.2         | 8.1         | 0.82          | No tuning                      |
+| mistral-7b-inst| sft_run01  | CUDA   | bf16      | 125            | 190            | 14.3         | 8.2         | 0.88          | Small domain adapter effect    |
+| mistral-7b-inst| lora_r16   | CUDA   | bf16      | 128            | 195            | 14.1         | 8.0         | 0.87          | Adapter-only                   |
+| mistral-7b-inst| qlora_bnb  | CUDA   | 4bit+fp16 | 135            | 205            | 9.8          | 8.5         | 0.86          | Lower VRAM, slight latency hit |
+| mistral-7b-inst| infer_8bit | CUDA   | 8bit      | 142            | 215            | 7.5          | 8.3         | 0.84          | Serving-oriented               |
+
+Machine-readable twin (same fields) as JSON lines for plotting later.
+
+================================================================================
+7. README.MD STRUCTURE (OUTLINE ONLY — DO NOT CREATE FILE UNTIL REQUESTED)
+================================================================================
+
+Suggested sections for a recruiter-grade README:
+
+1. Title and one-line value proposition
+2. Badges (Python version, license) — optional
+3. What this repo demonstrates (bullet list mapping to skills)
+4. Architecture diagram (ASCII or mermaid in README when created)
+5. Features (SFT, LoRA, QLoRA, quantization, FastAPI, benchmarks)
+6. Quickstart
+   - Prerequisites (GPU optional but recommended)
+   - Environment setup
+   - One command to run baseline, one to train, one to serve API
+7. Configuration
+   - How configs map to experiments
+8. Project structure (short)
+9. Benchmarks
+   - How to reproduce the results table
+10. Limitations and honest scope (small models, demo data)
+11. Roadmap
+12. License
+13. Citation / acknowledgments (Hugging Face, PEFT, FastAPI)
+
+Tone: concise, evidence-oriented, links to experiment outputs and registry.
+
+================================================================================
+8. RESUME BULLET POINTS
+================================================================================
+
+- Built an end-to-end LLM fine-tuning and optimization lab using Hugging Face
+  Transformers and PEFT, implementing SFT, LoRA, and QLoRA with config-driven
+  training pipelines, structured logging, and reproducible experiment tracking.
+
+- Designed a FastAPI inference service with a unified /generate contract across
+  base, fine-tuned, and quantized model variants, plus automated benchmarking
+  for latency, memory, and task-specific quality metrics.
+
+- Ran controlled GPU experiments (batch size, mixed precision, gradient
+  accumulation, quantization) to characterize throughput and VRAM tradeoffs,
+  documenting results in a versioned experiment registry for production-style
+  observability.
+
+================================================================================
+SUCCESS CRITERIA (CHECKLIST)
+================================================================================
+
+[ ] Baseline metrics captured before training
+[ ] Three training paradigms exercised: SFT, LoRA, QLoRA
+[ ] At least one quantization inference comparison completed
+[ ] FastAPI /generate works for multiple model kinds
+[ ] Benchmark table produced from a scripted runner
+[ ] registry.txt updated for every meaningful run
+[ ] No secrets in repo; .env.example documents configuration
+
+END OF PLAN

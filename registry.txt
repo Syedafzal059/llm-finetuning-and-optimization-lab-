@@ -1,0 +1,133 @@
+================================================================================
+EXPERIMENT AND ARTIFACT REGISTRY
+================================================================================
+Project: llm-finetuning-and-optimization-lab
+Purpose: Single canonical log of runs, checkpoints, and benchmark rows.
+Rules:
+- Append new entries; do not rewrite history.
+- Each RUN_ID must be unique (date + short slug recommended).
+- Store large weights outside git; record PATH_OR_URI only.
+- No secrets, API keys, or credentials in this file.
+
+================================================================================
+FIELD DEFINITIONS (per run entry)
+================================================================================
+RUN_ID              Unique identifier for this run
+PHASE               baseline | sft | lora | qlora | gpu_sweep | quant | api | bench
+STATUS              planned | running | completed | failed | abandoned
+CONFIG_PATH         Relative path to configs/*.yaml used
+MODEL_ID            Hugging Face model id or local path label
+HARDWARE            CPU model / GPU model / CUDA version (short)
+GIT_COMMIT          Optional commit hash when run was executed
+ARTIFACT_DIR        experiments/<RUN_ID>/ or external URI
+CHECKPOINT          Path to weights or adapter folder (if applicable)
+METRICS_PATH        Path to metrics.json or equivalent
+BENCHMARK_TABLE     Path to exported CSV/JSON table (if applicable)
+NOTES               Free text: OOM fixes, hyperparameter quirks, failures
+
+================================================================================
+TEMPLATE (copy block below for each new run)
+================================================================================
+
+RUN_ID:
+PHASE:
+STATUS:
+CONFIG_PATH:
+MODEL_ID:
+HARDWARE:
+GIT_COMMIT:
+ARTIFACT_DIR:
+CHECKPOINT:
+METRICS_PATH:
+BENCHMARK_TABLE:
+NOTES:
+
+================================================================================
+PRE-REGISTERED EXPERIMENT IDS (from plan; fill when executed)
+================================================================================
+
+EXP_ID: E1_cpu_vs_gpu_baseline
+DESCRIPTION: Same prompts and decode settings on CPU vs GPU for baseline model.
+PRIMARY_METRICS: latency_p50_ms, latency_p95_ms, peak_memory
+REGISTRY_RUN_IDS: (list RUN_IDs after execution)
+
+EXP_ID: E2_batch_size_memory
+DESCRIPTION: Sweep per_device_train_batch_size until OOM; record boundary.
+PRIMARY_METRICS: peak_vram_gb, step_time_s, oom_yes_no
+REGISTRY_RUN_IDS:
+
+EXP_ID: E3_gradient_accumulation
+DESCRIPTION: Fix safe micro-batch; sweep accumulation for effective batch.
+PRIMARY_METRICS: steps_to_convergence_proxy, step_time_s, loss_curve_path
+REGISTRY_RUN_IDS:
+
+EXP_ID: E4_mixed_precision_fp32_fp16_bf16
+DESCRIPTION: Compare numerical mode flags with identical data and steps.
+PRIMARY_METRICS: throughput_tokens_s, peak_vram_gb, stability_flag
+REGISTRY_RUN_IDS:
+
+EXP_ID: E5_lora_rank_sweep
+DESCRIPTION: Optional r grid with consistent alpha policy.
+PRIMARY_METRICS: adapter_size_mb, val_loss_proxy, infer_latency_ms
+REGISTRY_RUN_IDS:
+
+EXP_ID: E6_quantization_8bit_4bit_infer
+DESCRIPTION: Post-training quantized loads vs full precision adapters.
+PRIMARY_METRICS: load_time_s, peak_vram_gb, latency_p50_ms, quality_score
+REGISTRY_RUN_IDS:
+
+EXP_ID: E7_model_variant_quality
+DESCRIPTION: base vs sft vs lora vs qlora vs quantized on fixed prompt suite.
+PRIMARY_METRICS: quality_score, latency_p50_ms, peak_vram_gb
+REGISTRY_RUN_IDS:
+
+================================================================================
+MODEL VARIANT REGISTER (logical names for API and benchmarks)
+================================================================================
+Keep names stable for /generate routing. Map each to CHECKPOINT path in runs.
+
+VARIANT_KEY: base
+ROLE: Untrained baseline from MODEL_ID
+CHECKPOINT_RUN_ID: (fill)
+NOTES:
+
+VARIANT_KEY: sft
+ROLE: Supervised fine-tuned full or partial weights
+CHECKPOINT_RUN_ID:
+NOTES:
+
+VARIANT_KEY: lora
+ROLE: PEFT LoRA adapters + frozen base
+CHECKPOINT_RUN_ID:
+NOTES:
+
+VARIANT_KEY: qlora
+ROLE: 4-bit (or configured) base + LoRA adapters from training
+CHECKPOINT_RUN_ID:
+NOTES:
+
+VARIANT_KEY: infer_int8
+ROLE: 8-bit quantized artifact for serving
+CHECKPOINT_RUN_ID:
+NOTES:
+
+VARIANT_KEY: infer_int4
+ROLE: 4-bit quantized artifact for serving
+CHECKPOINT_RUN_ID:
+NOTES:
+
+================================================================================
+BENCHMARK ROW INDEX (optional cross-reference)
+================================================================================
+After each benchmark export, add one line per row file:
+
+BENCHMARK_FILE:
+ROWS: (count)
+EXPERIMENT_IDS_COVERED: E1, E7, ...
+CREATED_UTC:
+
+================================================================================
+RUN LOG (append completed runs below this line)
+================================================================================
+
+(No entries yet — populate as you execute phases.)
