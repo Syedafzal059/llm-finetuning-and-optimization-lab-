@@ -4,3 +4,4 @@ accelerate
 python-dotenv
 datasets
 pyyaml
+peft
