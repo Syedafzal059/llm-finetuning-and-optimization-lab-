@@ -5,3 +5,4 @@ python-dotenv
 datasets
 pyyaml
 peft
+bitsandbytes>=0.46.1
