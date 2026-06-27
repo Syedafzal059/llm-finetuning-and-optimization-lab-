@@ -1,0 +1,73 @@
+Migration Notes — Multi-Project Restructure
+============================================
+
+This document describes what moved where during the restructure from a
+single-project layout to a reusable multi-project template.
+
+MOVED TO core/
+--------------
+src/inference/model_loader.py  ->  core/inference/model_loader.py
+src/inference/generate.py        ->  core/inference/generate.py
+src/training/dataset_loader.py   ->  core/training/dataset_loader.py
+src/training/train_sft.py        ->  core/training/train_sft.py
+src/training/train_lora.py       ->  core/training/train_lora.py
+src/training/train_qlora.py      ->  core/training/train_qlora.py
+src/serving/api.py               ->  core/serving/api.py  (now project-aware via create_app)
+src/serving/model.py             ->  core/serving/model.py
+src/serving/schemas.py           ->  core/serving/schemas.py
+src/serving/config.yaml          ->  core/serving/config.yaml  (defaults only)
+src/utils/config_loader.py       ->  core/utils/config_loader.py  (deep merge + project loading)
+
+NEW FILES
+---------
+base_config.yaml                           Global defaults for all projects
+core/utils/logger.py                       Centralized logging to projects/{name}/logs/
+projects/clinical-notes/config.yaml        Example project configuration
+projects/clinical-notes/prompt_template.py Example prompt formatter
+projects/clinical-notes/data/raw/sample.json Example medical notes dataset (8 samples)
+run.py                                     Rewritten universal CLI (--project, --mode)
+
+REMOVED / REPLACED
+------------------
+configs.py/base.yaml         ->  base_config.yaml + per-project config.yaml
+data/raw/sample_dataset.json ->  projects/clinical-notes/data/raw/sample.json
+run_lora.py                  ->  python run.py --project X --mode inference
+src/                         ->  core/  (entire package renamed and refactored)
+model/                       ->  projects/{name}/model/{sft,lora,qlora}/
+
+IMPORT CHANGES
+--------------
+Old:  from src.inference.model_loader import load_model
+New:  from core.inference.model_loader import load_model
+
+Old:  load_config("configs.py/base.yaml")
+New:  load_project_config("clinical-notes")
+
+CLI CHANGES
+-----------
+Old:  python run.py
+New:  python run.py --project clinical-notes --mode inference
+
+Old:  python src/training/train_lora.py
+New:  python run.py --project clinical-notes --mode lora
+
+Old:  python run_lora.py
+New:  python run.py --project clinical-notes --mode inference
+
+Old:  uvicorn src.serving.api:app
+New:  python run.py --project clinical-notes --mode serve
+
+BEHAVIOR CHANGES
+----------------
+- All training scripts are project-aware; paths come from config, not hardcoded.
+- dataset_loader.py dynamically imports format_prompt() from each project's prompt_template.py.
+- Config is merged: base_config.yaml first, then projects/{name}/config.yaml overrides.
+- Logs write to projects/{name}/logs/training.log and serving.log.
+- Model artifacts save to projects/{name}/model/{sft,lora,qlora}/.
+
+ADDING A NEW PROJECT
+--------------------
+1. Create projects/my-project/config.yaml
+2. Create projects/my-project/prompt_template.py with format_prompt(sample)
+3. Add data under projects/my-project/data/raw/
+4. Run: python run.py --project my-project --mode qlora

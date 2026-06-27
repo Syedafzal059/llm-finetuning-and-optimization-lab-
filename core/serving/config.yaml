@@ -1,0 +1,22 @@
+# Default vLLM serving parameters (overridden per project via config_loader.build_serving_config)
+
+model:
+  max_model_len: 4096
+  gpu_memory_utilization: 0.85
+  max_lora_rank: 64
+  quantization_enabled: true
+  quantization: bitsandbytes
+  dtype: auto
+  trust_remote_code: false
+
+validation:
+  max_prompt_tokens: 2048
+
+serving:
+  host: 0.0.0.0
+  port: 8000
+  timeout_seconds: 60
+  rate_limit: 10/minute
+
+auth:
+  api_keys_env_var: SERVING_API_KEYS

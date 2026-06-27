@@ -1,0 +1,62 @@
+[
+  {
+    "clinical_description": "58-year-old male presents with acute substernal chest pain radiating to the left arm for 2 hours. Diaphoresis and shortness of breath noted. ECG shows ST elevation in leads II, III, and aVF. Troponin I elevated at 3.1 ng/mL.",
+    "icd_codes": "Primary: I21.9 — Acute myocardial infarction, unspecified\nSecondary: R07.9 — Chest pain, unspecified\nSecondary: R06.02 — Shortness of breath"
+  },
+  {
+    "clinical_description": "62-year-old female with type 2 diabetes mellitus, HbA1c 9.4%, presenting with numbness and tingling in both feet for 6 months. Monofilament testing shows loss of sensation bilaterally. No foot ulceration. eGFR 58 mL/min/1.73m².",
+    "icd_codes": "Primary: E11.42 — Type 2 diabetes mellitus with diabetic polyneuropathy\nSecondary: E11.22 — Type 2 diabetes mellitus with diabetic chronic kidney disease\nSecondary: N18.30 — Chronic kidney disease, stage 3 unspecified"
+  },
+  {
+    "clinical_description": "45-year-old male with 5-day history of productive cough, fever to 102.1°F, pleuritic chest pain, and fatigue. Exam reveals crackles in the right lower lobe. Chest X-ray shows right lower lobe consolidation. SpO2 93% on room air.",
+    "icd_codes": "Primary: J18.9 — Pneumonia, unspecified organism\nSecondary: R05.9 — Cough, unspecified\nSecondary: R50.9 — Fever, unspecified"
+  },
+  {
+    "clinical_description": "22-year-old female with 18 hours of periumbilical pain migrating to the right lower quadrant. Anorexia, nausea, and low-grade fever. McBurney point tenderness with rebound. WBC 14,200. CT abdomen confirms inflamed appendix without perforation.",
+    "icd_codes": "Primary: K35.80 — Unspecified acute appendicitis\nSecondary: R10.31 — Right lower quadrant pain\nSecondary: R11.0 — Nausea"
+  },
+  {
+    "clinical_description": "34-year-old female reports persistent low mood, anhedonia, poor sleep, and decreased appetite for 8 weeks. PHQ-9 score 18. Denies suicidal ideation. No manic symptoms. Functionally impaired at work.",
+    "icd_codes": "Primary: F32.1 — Major depressive disorder, single episode, moderate\nSecondary: R45.89 — Other symptoms involving emotional state\nSecondary: G47.00 — Insomnia, unspecified"
+  },
+  {
+    "clinical_description": "70-year-old male with long-standing hypertension and left ventricular hypertrophy on echocardiography. Presents with exertional dyspnea and bilateral ankle edema. BP 168/96, BNP 720 pg/mL, EF 55%.",
+    "icd_codes": "Primary: I11.0 — Hypertensive heart disease with heart failure\nSecondary: I10 — Essential (primary) hypertension\nSecondary: I51.7 — Cardiomegaly"
+  },
+  {
+    "clinical_description": "58-year-old male with CKD stage 3, eGFR 42 mL/min/1.73m², stable for 2 years. Proteinuria 1.2 g/24h. Creatinine 1.8 mg/dL. No acute symptoms. Managed with ACE inhibitor and dietary counseling.",
+    "icd_codes": "Primary: N18.30 — Chronic kidney disease, stage 3 unspecified\nSecondary: N08 — Glomerular disorders in diseases classified elsewhere\nSecondary: I10 — Essential (primary) hypertension"
+  },
+  {
+    "clinical_description": "76-year-old female with sudden onset right-sided weakness and slurred speech 90 minutes ago. NIHSS 12. CT head negative for hemorrhage. MRI shows acute infarct in left MCA territory. Atrial fibrillation noted on telemetry.",
+    "icd_codes": "Primary: I63.50 — Cerebral infarction due to unspecified occlusion or stenosis of unspecified cerebral artery\nSecondary: I48.91 — Unspecified atrial fibrillation\nSecondary: R47.1 — Dysarthria and anarthria"
+  },
+  {
+    "clinical_description": "82-year-old female fell at home, unable to bear weight on left hip. Shortened externally rotated left leg. X-ray confirms displaced fracture of the left femoral neck. Osteoporosis on prior DEXA.",
+    "icd_codes": "Primary: S72.002A — Fracture of unspecified part of neck of left femur, initial encounter for closed fracture\nSecondary: W19.XXXA — Unspecified fall, initial encounter\nSecondary: M81.0 — Age-related osteoporosis without current pathological fracture"
+  },
+  {
+    "clinical_description": "64-year-old male post-operative day 3 from colectomy, febrile to 103.2°F, tachycardic HR 118, hypotensive BP 88/52. Lactate 3.8 mmol/L. Blood cultures pending. Broad-spectrum antibiotics initiated for suspected sepsis.",
+    "icd_codes": "Primary: A41.9 — Sepsis, unspecified organism\nSecondary: R65.20 — Severe sepsis without septic shock\nSecondary: R50.9 — Fever, unspecified"
+  },
+  {
+    "clinical_description": "68-year-old male with COPD presents with worsening dyspnea, increased sputum production, and wheezing for 4 days. SpO2 88% on room air. ABG shows pH 7.32, PaCO2 58. Started on nebulized bronchodilators and systemic steroids.",
+    "icd_codes": "Primary: J44.1 — Chronic obstructive pulmonary disease with acute exacerbation\nSecondary: R06.02 — Shortness of breath\nSecondary: R09.3 — Abnormal sputum"
+  },
+  {
+    "clinical_description": "29-year-old female with dysuria, urinary frequency, and suprapubic discomfort for 2 days. No fever. Urinalysis positive for nitrites, leukocyte esterase, and bacteria. No flank pain.",
+    "icd_codes": "Primary: N39.0 — Urinary tract infection, site not specified\nSecondary: R30.0 — Dysuria\nSecondary: R35.0 — Frequency of micturition"
+  },
+  {
+    "clinical_description": "41-year-old male reports excessive worry about work and health for 6 months. Restlessness, muscle tension, and difficulty concentrating. GAD-7 score 15. No panic attacks. Sleep disrupted.",
+    "icd_codes": "Primary: F41.1 — Generalized anxiety disorder\nSecondary: R45.0 — Nervousness\nSecondary: G47.00 — Insomnia, unspecified"
+  },
+  {
+    "clinical_description": "55-year-old male with acute rise in creatinine from baseline 1.0 to 2.6 mg/dL over 48 hours after NSAID use and dehydration from gastroenteritis. Urine output decreased. Potassium 5.4 mEq/L. Renal ultrasound without obstruction.",
+    "icd_codes": "Primary: N17.9 — Acute kidney failure, unspecified\nSecondary: E86.0 — Dehydration\nSecondary: K52.9 — Noninfective gastroenteritis and colitis, unspecified"
+  },
+  {
+    "clinical_description": "52-year-old female presents for screening mammography. No palpable breast mass. Family history of breast cancer in mother at age 58. Mammogram shows BI-RADS Category 0 — incomplete, need additional imaging. Asymptomatic at visit.",
+    "icd_codes": "Primary: Z12.31 — Encounter for screening mammogram for malignant neoplasm of breast\nSecondary: Z80.3 — Family history of malignant neoplasm of breast\nSecondary: R92.8 — Other abnormal and inconclusive findings on diagnostic imaging of breast"
+  }
+]

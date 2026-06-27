@@ -1,0 +1,62 @@
+[
+  {
+    "patient_question": "I was prescribed metformin 500mg twice daily. I'm worried about side effects. What should I watch out for and when should I call my doctor?",
+    "support_response": "Metformin is generally well-tolerated. Common side effects include nausea, diarrhea, and stomach upset, especially when you first start taking it. These often improve after a few weeks as your body adjusts.\n\nContact your doctor if you experience severe stomach pain or vomiting, unusual muscle pain or weakness, difficulty breathing, or signs of lactic acidosis (feeling very cold, dizzy, or extremely weak). These are uncommon but need prompt attention.\n\nTake metformin with food to reduce stomach upset, and never skip or change doses without talking to your doctor first. Your care team can adjust the dose if side effects persist."
+  },
+  {
+    "patient_question": "I forgot to take my blood pressure pill this morning. Should I take it now or just wait until tomorrow?",
+    "support_response": "Missing one dose of blood pressure medication is usually not dangerous, but it's best to get back on schedule as soon as you remember.\n\nIf it has only been a few hours since your usual time, take the missed dose now. If it is almost time for your next dose, skip the missed one and take your next dose at the regular time. Do not double up to make up for a missed dose.\n\nIf you miss doses often, let your doctor know — consistent blood pressure control matters for your long-term health. A pill organizer or phone reminder can help."
+  },
+  {
+    "patient_question": "I'm having knee replacement surgery next week. What should I expect during recovery at home?",
+    "support_response": "After knee replacement, most people go home within a few days with physical therapy instructions. Expect some swelling, stiffness, and pain — this is normal and should gradually improve over weeks to months.\n\nYou will likely use a walker or cane at first. Ice and elevation help with swelling. Do your prescribed exercises daily; they are essential for regaining strength and range of motion.\n\nCall your surgeon if you develop a fever over 101.5°F, increasing redness or drainage from the incision, calf swelling with pain, or sudden shortness of breath. Attend all follow-up appointments and keep taking blood clot prevention medication as directed."
+  },
+  {
+    "patient_question": "My colonoscopy is in three days. I'm confused about the prep instructions. Can you walk me through what I need to do?",
+    "support_response": "Colonoscopy prep clears your bowel so your doctor can see the colon clearly. You will typically switch to clear liquids the day before the procedure and avoid solid food.\n\nYour prep kit includes a laxative solution — drink it exactly as instructed, usually the evening before and possibly again the morning of. Stay near a bathroom once you start. Clear liquids include water, broth, apple juice, and plain tea or coffee without milk.\n\nStop iron supplements and certain medications as your doctor directed. If you take blood thinners, follow the specific instructions you were given. Call your doctor's office if you vomit the prep, cannot finish it, or have questions about your medications."
+  },
+  {
+    "patient_question": "I'm on warfarin and heard I need to watch my diet. What foods should I avoid?",
+    "support_response": "Warfarin works best when your vitamin K intake stays consistent from day to day, rather than avoiding vitamin K entirely. Leafy greens like spinach, kale, and broccoli contain vitamin K — you can eat them, but try to keep the amount similar each week.\n\nAvoid large, sudden changes such as starting a strict green-juice diet or eating much more or less salad than usual. Limit alcohol, which can affect warfarin. Cranberry products in large amounts may also interact.\n\nYou will need regular INR blood tests to keep your dose safe. Report any unusual bruising, bleeding gums, nosebleeds, or dark stools to your doctor right away. Never start new vitamins, herbal supplements, or antibiotics without checking with your care team."
+  },
+  {
+    "patient_question": "How should I store my insulin? I'm traveling next month and worried it will go bad.",
+    "support_response": "Unopened insulin vials or pens should be refrigerated between 36°F and 46°F (2°C to 8°C) until the expiration date. Once opened, most insulins can be kept at room temperature (below 86°F / 30°C) for about 28 to 42 days depending on the type — check your label.\n\nNever freeze insulin or leave it in a hot car. When traveling, carry insulin in your hand luggage with a small cooler pack if needed. Do not store it in checked baggage where temperatures are uncontrolled.\n\nIf insulin looks cloudy when it should be clear, or has been exposed to extreme heat or cold, discard it and use a new supply. Your pharmacist can confirm storage times for your specific insulin brand."
+  },
+  {
+    "patient_question": "I have an MRI scheduled tomorrow. I have claustrophobia and a metal implant in my knee. Is that okay?",
+    "support_response": "Most modern knee implants are MRI-safe, but you must tell the MRI team about any metal in your body — implants, pacemakers, clips, or shrapnel — before your scan. They will verify safety using your implant card or records.\n\nFor claustrophobia, let the technologist know in advance. Many centers offer headphones with music, a mirror to see outside the scanner, or in some cases mild sedation prescribed by your doctor. The scan itself is painless but can be noisy.\n\nRemove all jewelry and wear comfortable clothing without metal zippers when possible. If you were given sedation instructions, arrange for someone to drive you home. Call your doctor's office if you develop any new pain or swelling at the implant site before the appointment."
+  },
+  {
+    "patient_question": "I'm starting chemotherapy and I'm scared about side effects. How can I manage nausea and fatigue at home?",
+    "support_response": "Nausea and fatigue are common during chemotherapy, but your care team has tools to help. Take anti-nausea medications exactly as prescribed — often before meals — even if you feel okay at first.\n\nEat small, frequent meals and choose bland foods like crackers, rice, or bananas when your appetite is low. Stay hydrated with water or electrolyte drinks. Rest when you need to, but light walks can reduce fatigue if your doctor approves.\n\nCall your oncology team if you cannot keep fluids down for 24 hours, have a fever of 100.4°F or higher, notice unusual bruising or bleeding, or feel too weak to get out of bed. Report any new or worsening symptoms promptly — early support prevents complications."
+  },
+  {
+    "patient_question": "I had gallbladder surgery last week. How do I take care of the incision and know if it's infected?",
+    "support_response": "Keep the incision clean and dry unless your surgeon gave different instructions. You may shower after 24 to 48 hours if approved, but avoid soaking baths, swimming, or scrubbing the area.\n\nSome bruising and mild redness are normal. Watch for signs of infection: spreading redness, warmth, increasing pain, pus or foul-smelling drainage, or fever above 101°F.\n\nAvoid heavy lifting — usually nothing over 10 pounds — until your surgeon clears you, typically about two weeks. Gentle walking is encouraged to aid recovery. Contact your surgical team if you develop worsening abdominal pain, persistent vomiting, yellowing of the skin, or any concern about the wound."
+  },
+  {
+    "patient_question": "My child has a high fever and I'm not sure if we should go to the ER or urgent care. How do I decide?",
+    "support_response": "Go to the emergency room or call 911 if your child has trouble breathing, is difficult to wake, has a stiff neck with headache, a rash that does not fade when pressed, severe dehydration (no tears, dry mouth, no urine for 8 hours), or a seizure.\n\nUrgent care can often handle moderate fever with ear pain, sore throat, mild dehydration, or minor injuries when your pediatrician is unavailable.\n\nFor infants under 3 months with any fever of 100.4°F or higher, contact your doctor or go to the ER immediately. When in doubt, call your pediatrician's after-hours line — they can guide you based on your child's age and symptoms."
+  },
+  {
+    "patient_question": "I have diabetes and I caught a bad cold. My blood sugars are running high. What should I do?",
+    "support_response": "Illness can raise blood sugar even when you are not eating much. Check your glucose more often — every 2 to 4 hours if possible — and stay hydrated with sugar-free fluids.\n\nContinue taking your diabetes medications unless your doctor told you otherwise. Some people need temporary insulin adjustments during illness — ask your care team if you have a sick-day plan.\n\nMonitor for warning signs: blood sugar persistently above 300 mg/dL, ketones in urine (if you test at home), vomiting that prevents keeping fluids down, or confusion. Seek urgent care if any of these occur. Rest, and call your doctor early so they can help you stay on track."
+  },
+  {
+    "patient_question": "I started a statin and my muscles ache. Should I stop taking it?",
+    "support_response": "Muscle aches can occur with statins, but do not stop the medication on your own without talking to your doctor. Mild soreness sometimes improves with time or a dose adjustment.\n\nContact your doctor promptly if you have severe muscle pain, weakness that interferes with daily activities, dark-colored urine, or pain plus fever. These could signal a rare but serious condition called rhabdomyolysis.\n\nYour doctor may check a blood test called CK and consider switching to a different statin or lower dose. Keep taking the statin until you speak with them unless you were told otherwise. Never adjust heart or cholesterol medications without medical guidance."
+  },
+  {
+    "patient_question": "I feel better after two days of antibiotics. Can I stop taking them now?",
+    "support_response": "Even if you feel better, finish the full course of antibiotics exactly as prescribed unless your doctor tells you to stop. Stopping early can leave bacteria alive, cause the infection to return, and contribute to antibiotic resistance.\n\nTake doses at evenly spaced times and do not skip doses. If side effects like diarrhea or nausea are bothersome, call your doctor — they may suggest ways to manage symptoms rather than stopping treatment.\n\nContact your doctor if your symptoms worsen, you develop a rash, or you finish the course but still do not feel recovered. Proper completion protects both your health and the community."
+  },
+  {
+    "patient_question": "How often should I check my blood sugar? I was just diagnosed with type 2 diabetes.",
+    "support_response": "Checking frequency depends on your treatment plan. Many people starting metformin alone may check once daily or a few times per week at different times to learn their patterns. If you take insulin or certain other medications, your doctor may recommend before-meal and bedtime checks.\n\nKeep a simple log of readings, meals, and activity to share at follow-up visits. Target ranges are personal — your doctor will set goals based on your age and health conditions.\n\nCall your doctor if you repeatedly see readings below 70 mg/dL or above 300 mg/dL, or if you have symptoms of low blood sugar such as shakiness, sweating, or confusion. Your diabetes educator can teach proper technique and help you choose a schedule that fits your life."
+  },
+  {
+    "patient_question": "My surgery is at 7 AM and they said I can't eat after midnight. Can I have coffee or water in the morning?",
+    "support_response": "For most surgeries requiring general anesthesia, you must not eat or drink anything after midnight, including coffee, gum, and mints. Even small amounts in your stomach can cause serious complications during anesthesia.\n\nFollow the exact fasting instructions on your pre-op paperwork. If your surgery is late in the day, your team may give different cut-off times — when in doubt, call the pre-op nurse line.\n\nYou may be told to take certain morning medications with a small sip of water; only do this if specifically instructed. Arrive on time, bring your ID and insurance card, and arrange for someone to drive you home. If you accidentally eat or drink, tell the staff immediately — your procedure may need rescheduling for your safety."
+  }
+]

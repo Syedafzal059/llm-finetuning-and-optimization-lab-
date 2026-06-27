@@ -6,3 +6,23 @@ datasets
 pyyaml
 peft
 bitsandbytes>=0.46.1
+
+# Serving layer (FastAPI + vLLM)
+fastapi
+uvicorn[standard]
+vllm
+pydantic
+redis
+slowapi
+httpx
+
+# Testing
+pytest
+fakeredis
+
+# Evaluation metrics
+rouge-score
+nltk
+evaluate
+pandas
+tabulate

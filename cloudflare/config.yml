@@ -1,0 +1,37 @@
+# Reference template — live config is written to ~/.cloudflared/config.yml
+# by scripts/setup_https.sh. Replace placeholders before manual use.
+
+tunnel: YOUR_TUNNEL_ID
+credentials-file: /root/.cloudflared/YOUR_TUNNEL_ID.json
+
+ingress:
+
+  # Client 1: clinical-notes
+  - hostname: clinical-notes.yourdomain.com
+    service: http://localhost:8001
+    originRequest:
+      connectTimeout: 30s
+      keepAliveTimeout: 90s
+      keepAliveConnections: 100
+      noTLSVerify: false
+
+  # Client 2: medical-coding
+  - hostname: medical-coding.yourdomain.com
+    service: http://localhost:8002
+    originRequest:
+      connectTimeout: 30s
+      keepAliveTimeout: 90s
+      keepAliveConnections: 100
+      noTLSVerify: false
+
+  # Client 3: patient-support
+  - hostname: patient-support.yourdomain.com
+    service: http://localhost:8003
+    originRequest:
+      connectTimeout: 30s
+      keepAliveTimeout: 90s
+      keepAliveConnections: 100
+      noTLSVerify: false
+
+  # Reject all other traffic
+  - service: http_status:404

@@ -1,0 +1,34 @@
+[
+  {
+    "clinical_note": "58-year-old male presents with substernal chest pain radiating to left arm for 2 hours. BP 158/92, HR 98, diaphoretic. ECG shows ST elevation in leads II, III, aVF. Troponin elevated at 2.4 ng/mL.",
+    "summary": "S: Chest pain x2h, radiation to left arm, diaphoresis. O: BP 158/92, HR 98, ST elevation II/III/aVF, troponin 2.4. A: Acute inferior STEMI. P: Activate cath lab, aspirin 325mg, heparin bolus, monitor in CCU."
+  },
+  {
+    "clinical_note": "34-year-old female with 5-day history of productive cough, fever to 101.5F, and pleuritic chest pain. Exam: crackles right lower lobe, SpO2 94% on room air. CXR: right lower lobe consolidation.",
+    "summary": "S: Productive cough 5 days, fever, pleuritic pain. O: RLL crackles, SpO2 94% RA, CXR RLL consolidation. A: Community-acquired pneumonia, right lower lobe. P: Azithromycin 500mg day 1 then 250mg x4 days, fluids, follow-up in 48h."
+  },
+  {
+    "clinical_note": "72-year-old female with progressive dyspnea on exertion over 3 weeks. History of HFpEF. Exam: JVD 8cm, bilateral crackles, 2+ pitting edema to knees. BNP 890 pg/mL.",
+    "summary": "S: Progressive DOE x3 weeks, known HFpEF. O: JVD 8cm, bibasilar crackles, 2+ edema, BNP 890. A: Acute decompensated heart failure. P: IV furosemide 40mg BID, daily weights, fluid restriction 1.5L, cardiology consult."
+  },
+  {
+    "clinical_note": "45-year-old male with type 2 diabetes, HbA1c 9.2%, presenting for routine follow-up. No hypoglycemic episodes. Foot exam normal, monofilament intact bilaterally.",
+    "summary": "S: T2DM follow-up, no hypoglycemia. O: HbA1c 9.2%, normal foot exam, intact sensation. A: Uncontrolled type 2 diabetes mellitus. P: Increase metformin to 1000mg BID, start GLP-1 agonist, diabetes education referral, recheck A1c in 3 months."
+  },
+  {
+    "clinical_note": "28-year-old female with acute onset severe headache, photophobia, and neck stiffness. Kernig and Brudzinski signs positive. LP: WBC 450/mm3, glucose 45, protein 85.",
+    "summary": "S: Acute severe headache, photophobia, neck stiffness. O: Positive Kernig/Brudzinski, LP WBC 450, glucose 45, protein 85. A: Bacterial meningitis, pending culture. P: Empiric ceftriaxone + vancomycin + dexamethasone, isolation precautions, neurology consult."
+  },
+  {
+    "clinical_note": "65-year-old male post-op day 2 from total knee arthroplasty. Pain 6/10, incision clean and dry. PT notes limited flexion to 70 degrees. DVT prophylaxis with enoxaparin ongoing.",
+    "summary": "S: Post-op knee pain 6/10. O: POD2 TKA, clean incision, flexion 70 degrees, on enoxaparin. A: Expected post-operative recovery, mild flexion limitation. P: Continue PT twice daily, multimodal analgesia, DVT prophylaxis x14 days, discharge planning day 3."
+  },
+  {
+    "clinical_note": "19-year-old male brought by EMS after MVC. GCS 14, tender abdomen left upper quadrant, BP 90/60, HR 120. FAST exam positive for free fluid. Hemoglobin 9.1 g/dL.",
+    "summary": "S: MVC, abdominal pain LUQ. O: GCS 14, BP 90/60, HR 120, FAST positive, Hgb 9.1. A: Blunt abdominal trauma, suspected splenic injury with hemodynamic instability. P: 2 large-bore IVs, type and cross, trauma surgery consult, prepare for OR."
+  },
+  {
+    "clinical_note": "50-year-old female with major depressive disorder, PHQ-9 score 18, reports insomnia and poor appetite x6 weeks. Denies SI/HI. Currently on sertraline 50mg daily x4 weeks with minimal improvement.",
+    "summary": "S: Depression worsening x6 weeks, insomnia, poor appetite, denies SI/HI. O: PHQ-9 18, on sertraline 50mg x4 weeks. A: Moderate-severe MDD, partial SSRI response. P: Increase sertraline to 100mg, CBT referral, safety plan, follow-up in 2 weeks."
+  }
+]

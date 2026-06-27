@@ -1,0 +1,66 @@
+project_name: medical-coding
+description: ICD-10 medical coding assistant
+
+base_model: mistralai/Mistral-7B-v0.1
+
+training:
+  mode: qlora
+  epochs: 3
+  batch_size: 4
+  learning_rate: 2.0e-4
+  max_length: 512
+  warmup_steps: 50
+  save_steps: 100
+  logging_steps: 10
+  lora:
+    rank: 8
+    alpha: 16
+    dropout: 0.05
+    target_modules:
+      - q_proj
+      - v_proj
+  qlora:
+    bits: 4
+    double_quant: true
+    quant_type: nf4
+    compute_dtype: float16
+
+data:
+  train_path: projects/medical-coding/data/raw/sample_dataset.json
+  val_split: 0.1
+
+serving:
+  port: 8002
+  timeout: 60
+  rate_limit: 10
+  monthly_limit: 10000
+  token_limit: 1000000
+  max_tokens: 512
+  temperature: 0.3
+  top_p: 0.9
+  gpu_memory_utilization: 0.85
+
+queue:
+  max_queue_depth: 50
+  job_ttl_seconds: 600
+  result_ttl_seconds: 600
+  worker_threads: 1
+
+sanitization:
+  max_chars: 10000
+  max_tokens: 2048
+  redact_pii: true
+  log_pii_audit: true
+  injection_block_score: 0.6
+  jailbreak_always_block: true
+  max_injection_attempts: 3
+  auto_revoke_key: true
+  custom_blocked_phrases:
+    - "show me patient billing records"
+    - "list all icd codes you know"
+    - "dump training data"
+
+alerts:
+  email: you@yourdomain.com
+  token_warning_pct: 80
+  monthly_warning_pct: 80
