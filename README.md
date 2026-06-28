@@ -56,6 +56,7 @@ This repository is an **end-to-end Hugging Face Transformers pipeline** restruct
          projects/clinical-notes/
          ├── config.yaml
          ├── prompt_template.py
+         ├── download_data.py         # Fetch medical training data from Hugging Face
          ├── data/raw/sample.json
          ├── model/{sft,lora,qlora}/
          └── logs/{training,serving}.log
@@ -96,6 +97,7 @@ llm-finetuning-and-optimization-lab/
 │   └── clinical-notes/                # Example: medical note summarization
 │       ├── config.yaml
 │       ├── prompt_template.py
+│       ├── download_data.py           # Download medical flashcard dataset
 │       └── data/raw/sample.json
 ├── base_config.yaml                   # Global defaults
 ├── run.py                             # Universal entry point
@@ -163,9 +165,130 @@ Safe to commit: `.env.example`, `projects/**/.env.example`, source code, configs
 
 ---
 
+## Google Colab (GPU Training)
+
+Use Colab for **QLoRA on a free GPU** without a local CUDA setup. Full workflow for the `clinical-notes` project:
+
+### 1. Setup runtime and clone
+
+```python
+# Optional: persist adapters to Drive
+from google.colab import drive
+drive.mount('/content/drive')
+
+!git clone https://github.com/YOUR_USERNAME/llm-finetuning-and-optimization-lab-.git
+%cd /content/llm-finetuning-and-optimization-lab-
+```
+
+Replace `YOUR_USERNAME` with your GitHub username or fork URL.
+
+### 2. Install dependencies
+
+```python
+!pip install -q -r requirements.txt
+```
+
+`requirements.txt` includes `bitsandbytes` and `torchao>=0.16.0` for QLoRA. Colab may show pip conflict warnings for preinstalled packages (`cuml`, `gradio`, etc.) — usually safe to ignore.
+
+Optional `torchao` messages like `Failed to load .../_C_mxfp8...` mean optional CUDA extensions are missing; **training still works**.
+
+### 3. (Optional) Hugging Face token
+
+```python
+import os
+os.environ["HF_TOKEN"] = "hf_your_token_here"
+```
+
+### 4. Download training data
+
+**Run before training** to replace the bundled sample with 500 real medical Q&A examples:
+
+```python
+!python projects/clinical-notes/download_data.py --limit 500
+```
+
+Writes to `projects/clinical-notes/data/raw/sample.json` (path from `config.yaml`). Verify:
+
+```python
+import json
+with open("projects/clinical-notes/data/raw/sample.json") as f:
+    print(len(json.load(f)), "examples")  # expect 500
+```
+
+Training should log `Map: 450/450` (train) and `Map: 50/50` (val). If you see `7/7`, the data step did not run.
+
+### 5. Colab config overrides (recommended)
+
+Patch config for GPU + QLoRA so eval finds the right adapter path:
+
+```python
+import yaml
+from pathlib import Path
+
+cfg_path = Path("projects/clinical-notes/config.yaml")
+cfg = yaml.safe_load(cfg_path.read_text())
+cfg["model"]["device"] = "cuda"
+cfg["training"]["mode"] = "qlora"
+cfg_path.write_text(yaml.dump(cfg, default_flow_style=False, sort_keys=False))
+```
+
+### 6. Train, evaluate, and save
+
+```python
+!python run.py --project clinical-notes --mode qlora
+!python run.py --project clinical-notes --mode eval
+# If training.mode is still "lora": --adapter qlora
+```
+
+```python
+# Optional: copy adapters to Drive before session ends
+import shutil
+from pathlib import Path
+shutil.copytree(
+    "projects/clinical-notes/model/qlora",
+    "/content/drive/MyDrive/clinical-notes-qlora",
+    dirs_exist_ok=True,
+)
+```
+
+### Colab troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `Map: 7/7` train samples | Re-run `download_data.py`; confirm 500 rows in `sample.json` |
+| Loss stuck ~12 | Same — old 8-row sample still in place |
+| Eval loads wrong adapter | Set `training.mode: qlora` or use `--adapter qlora` |
+| QLoRA falls back to CPU LoRA | Runtime → Change runtime type → T4 GPU |
+
+---
+
 ## Usage — clinical-notes Example
 
-The bundled **clinical-notes** project summarizes medical notes into SOAP format using `mistralai/Mistral-7B-v0.1` and an 8-sample dataset.
+The **clinical-notes** project fine-tunes a model on medical text. Download real training data before your first run (see [Download training data](#download-training-data) below).
+
+### Download training data
+
+Fetches **medical flashcards** from Hugging Face (`medalpaca/medical_meadow_medical_flashcards`), converts them to `{clinical_note, summary}` JSON, and saves to the path in `config.yaml`:
+
+```bash
+python projects/clinical-notes/download_data.py
+```
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--limit` | `500` | Max examples after filtering (`0` = all) |
+| `--output` | from config | Override output JSON path |
+| `--min-note-len` | `50` | Minimum input length (chars) |
+| `--min-summary-len` | `20` | Minimum output length (chars) |
+
+Examples:
+
+```bash
+python projects/clinical-notes/download_data.py --limit 500
+python projects/clinical-notes/download_data.py --limit 0 --output projects/clinical-notes/data/raw/full.json
+```
+
+The default dataset is medical **Q&A**, while `prompt_template.py` asks for SOAP summarization. Training works, but aligning the instruction text with your data improves results.
 
 ### Train with QLoRA
 
@@ -332,6 +455,7 @@ No changes to `core/` are required.
 
 | Task | Command |
 |------|---------|
+| Download training data | `python projects/clinical-notes/download_data.py --limit 500` |
 | QLoRA training | `python run.py --project clinical-notes --mode qlora` |
 | LoRA training | `python run.py --project clinical-notes --mode lora` |
 | SFT training | `python run.py --project clinical-notes --mode sft` |
