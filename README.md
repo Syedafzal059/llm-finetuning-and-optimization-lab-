@@ -144,25 +144,6 @@ cp .env.example .env   # Linux/macOS
 copy .env.example .env # Windows
 ```
 
-### What NOT to commit (GitHub safety)
-
-These paths are listed in `.gitignore` and must **never** be pushed:
-
-| Path | Why |
-|------|-----|
-| `.env`, `projects/**/.env` | API keys, HF tokens, secrets |
-| `**/usage.db` | Per-project SQLite usage data |
-| `**/model/` | LoRA/QLoRA checkpoints (large) |
-| `**/logs/`, `logs/` | Runtime training/serving/eval logs |
-| `venv/`, `.venv/` | Local Python environment |
-
-Safe to commit: `.env.example`, `projects/**/.env.example`, source code, configs, sample data.
-
-| Variable | Purpose |
-|----------|---------|
-| `SERVING_API_KEYS` | Comma-separated keys for `/generate`, `/metrics`, `/fine-tune-status` |
-| `HF_TOKEN` | Hugging Face token for gated models like Mistral-7B |
-
 ---
 
 ## Google Colab (GPU Training)
@@ -176,11 +157,9 @@ Use Colab for **QLoRA on a free GPU** without a local CUDA setup. Full workflow 
 from google.colab import drive
 drive.mount('/content/drive')
 
-!git clone https://github.com/YOUR_USERNAME/llm-finetuning-and-optimization-lab-.git
+!git clone https://github.com/SyedAfzal059/llm-finetuning-and-optimization-lab-.git
 %cd /content/llm-finetuning-and-optimization-lab-
 ```
-
-Replace `YOUR_USERNAME` with your GitHub username or fork URL.
 
 ### 2. Install dependencies
 
